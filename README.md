@@ -7,7 +7,10 @@ The game is created on a 4 by 4 grid with two markers, ‘X’ and ‘O’. The 
 </p>
 
 
-https://user-images.githubusercontent.com/47095611/204602433-7a5d5fb2-3ca8-4345-a738-2f3eb3165217.mp4
+
+
+https://user-images.githubusercontent.com/47095611/204605169-05e06325-e0f9-42e8-bd9d-194873090e3a.mp4
+
 
 
 ## Projections

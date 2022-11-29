@@ -7,9 +7,8 @@ The game is created on a 4 by 4 grid with two markers, ‘X’ and ‘O’. The 
 </p>
 
 
-<p align="center">
+
 <img src="https://user-images.githubusercontent.com/47095611/204605169-05e06325-e0f9-42e8-bd9d-194873090e3a.mp4" width="400">
-</p>
 
 
 

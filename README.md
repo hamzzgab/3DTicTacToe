@@ -30,6 +30,7 @@ The camera can be moved by using the Left (A), Right (D), Forward (W), Backward 
 </p>
 
 **Note: FORWARD AND BACKWARD TRANSFORMATIONS ARE ONLY VISIBLE IN PERSPECTIVE PROJECTION**
+
 3. Forward (Key W):
 <p align="center">
 <img width="400" alt="Forward" src="https://user-images.githubusercontent.com/47095611/204598608-a9419a77-80d8-4c86-b575-9df8fa00611f.png">

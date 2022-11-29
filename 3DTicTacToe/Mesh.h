@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// [2] OpenGL. (2014, June 1). In learnopengl. https://learnopengl.com/Getting-started/OpenGL
 struct Vertex
 {
     // POSITION

@@ -23,8 +23,18 @@ The camera can be moved by using the Left (A), Right (D), Forward (W), Backward 
 <p align="center">
 <img width="400" alt="Left" src="https://user-images.githubusercontent.com/47095611/204598126-f8de1957-8528-4606-ba9a-0c3744859e8d.png">
 </p>
-3. Right (Key D):
+
+2. Right (Key D):
 <p align="center">
-<img width="912" alt="Screenshot 2022-11-29 at 17 17 52" src="https://user-images.githubusercontent.com/47095611/204598253-bec8de45-9cf9-42d5-8faf-ee2e5cf795b0.png">
+<img width="400" alt="Right" src="https://user-images.githubusercontent.com/47095611/204598253-bec8de45-9cf9-42d5-8faf-ee2e5cf795b0.png">
 </p>
-4. 
+
+**Note: FORWARD AND BACKWARD TRANSFORMATIONS ARE ONLY VISIBLE IN PERSPECTIVE PROJECTION**
+3. Forward (Key W):
+<p align="center">
+<img width="400" alt="Forward" src="https://user-images.githubusercontent.com/47095611/204598608-a9419a77-80d8-4c86-b575-9df8fa00611f.png">
+</p>
+5. Backward (Key S):
+<p align="center">
+<img width="400" alt="Backward" src="https://user-images.githubusercontent.com/47095611/204598696-9b8e5d46-d758-4af7-afe6-1fdddad8dd31.png">
+</p>

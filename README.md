@@ -6,8 +6,13 @@ The game is created on a 4 by 4 grid with two markers, ‘X’ and ‘O’. The 
 <img width="250" alt="Atari 3D TicTacToe" src="https://user-images.githubusercontent.com/47095611/204596196-cb1f4675-2e2a-452c-a5ea-34108b79c345.png">
 </p>
 
+
+https://user-images.githubusercontent.com/47095611/204602433-7a5d5fb2-3ca8-4345-a738-2f3eb3165217.mp4
+
+
 ## Projections
 I created the game in an **orthographic projection**. Three models are used for this, i.e. ‘X’ and ‘O’ markers and the primary 4x4 grid. There are four 4x4 grids stacked on top of each other; in these blocks, the different markers are placed at their respective position.
+
 <p align="center">
 <img width="400" alt="OpenGL 3D TicTacToe" src="https://user-images.githubusercontent.com/47095611/204596701-c708df4f-5bb7-4cf4-9d93-f45c0613387f.png">
 </p>
@@ -62,3 +67,9 @@ The camera can be moved by using the Left (A), Right (D), Forward (W), Backward 
 <p align="center">
   <img width="400" alt="Screenshot 2022-11-25 at 19 57 27" src="https://user-images.githubusercontent.com/47095611/204599498-de771b74-64f6-4c7a-a56e-ebd9bb4b2151.png">
 </p>
+
+## Lighting
+
+I have implemented Directional Lighitng in the game. So that each element in the game has the same amout of lighting.
+
+

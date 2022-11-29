@@ -19,7 +19,9 @@ You can shift between perspectives by pressing the key 'P'. The default orientat
 </p>
 
 ## Movement
-The camera can be moved by using the Left (A), Right (D), Forward (W), Backward (S) keys.
+The camera can be moved by using the Left (A), Right (D), Forward (W), Backward (S) keys. And also Left, Right, Up, and Down using the mouse.
+
+### Key Movements
 1. Left (Key A):
 <p align="center">
 <img width="400" alt="Left" src="https://user-images.githubusercontent.com/47095611/204598126-f8de1957-8528-4606-ba9a-0c3744859e8d.png">
@@ -36,7 +38,27 @@ The camera can be moved by using the Left (A), Right (D), Forward (W), Backward 
 <p align="center">
 <img width="400" alt="Forward" src="https://user-images.githubusercontent.com/47095611/204598608-a9419a77-80d8-4c86-b575-9df8fa00611f.png">
 </p>
+
 5. Backward (Key S):
 <p align="center">
 <img width="400" alt="Backward" src="https://user-images.githubusercontent.com/47095611/204598696-9b8e5d46-d758-4af7-afe6-1fdddad8dd31.png">
+</p>
+
+### Scrolling
+
+1. Up 
+<p align="center">
+  <img width="912" alt="Screenshot 2022-11-25 at 19 57 43" src="https://user-images.githubusercontent.com/47095611/204599403-973b77d9-f39f-46fe-8e7b-5fbdd5aacc72.png">
+</p>
+2. Down
+<p align="center">
+  <img width="912" alt="Screenshot 2022-11-25 at 19 57 36" src="https://user-images.githubusercontent.com/47095611/204599430-12de3ff3-1898-4e7a-b638-b27c3d396e86.png">
+</p>
+4. Left
+<p align="center">
+  <img width="912" alt="Screenshot 2022-11-25 at 19 57 32" src="https://user-images.githubusercontent.com/47095611/204599471-c4ffb06f-e0dc-41f4-ab56-84590b4caeb0.png">
+</p>
+5. Right
+<p align="center">
+  <img width="912" alt="Screenshot 2022-11-25 at 19 57 27" src="https://user-images.githubusercontent.com/47095611/204599498-de771b74-64f6-4c7a-a56e-ebd9bb4b2151.png">
 </p>

@@ -21,22 +21,20 @@
 
 // Other Libs
 #include "SOIL2/SOIL2.h"
+#include <vector>
 
 // Properties
 const GLuint WIDTH = 800, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // Function prototypes
+void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color = glm::vec4(1.0f));
 void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
 void MouseCallback( GLFWwindow *window, double xPos, double yPos );
 void DoMovement( );
 
 int projectionMode = 0; // Default = Orthographic
 int cameraMode = 0; // Default = Disabled
-
-
-glm::mat4 parentGrid1 = glm::mat4(1.0f);
-
 
 Camera camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
 
@@ -51,6 +49,95 @@ glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
 
 glm::mat4 model = glm::mat4(1.0);
 
+std::vector< glm::vec3 > stored_grid;
+
+glm::vec3 first_grid[] = {
+    glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
+    glm::vec3(-6.5f, 0.0f, -20.0f),  // 0, 0, 1
+    glm::vec3(6.5f, 0.0f, -20.0f),   // 0, 0, 2
+    glm::vec3(19.5f, 0.0f, -20.0f),  // 0, 0, 3
+
+    glm::vec3(-19.5f, 0.0f, -7.0f),  // 0, 1, 0
+    glm::vec3(-6.5f, 0.0f, -7.0f),   // 0, 1, 1
+    glm::vec3(6.5f,  0.0f, -7.0f),   // 0, 1, 2
+    glm::vec3(19.5f, 0.0f, -7.0f),   // 0, 1, 3
+
+    glm::vec3(-20.0f, 0.5f, 7.5f),   // 0, 2, 0
+    glm::vec3(-7.0f, 0.5f, 7.5f),    // 0, 2, 1
+    glm::vec3(6.0f, 0.5f, 7.5f),     // 0, 2, 2
+    glm::vec3(19.0f, 0.5f, 7.5f),    // 0, 2, 3
+
+    glm::vec3(-20.0f, 0.5f, 20.0f),  // 0, 3, 0
+    glm::vec3(-7.0f, 0.5f, 20.0f),   // 0, 3, 1
+    glm::vec3(6.0f, 0.5f, 20.0f),    // 0, 3, 2
+    glm::vec3(19.0f, 0.5f, 20.0f),   // 0, 3, 3
+};
+
+glm::vec3 second_grid[] = {
+    glm::vec3(-15.5f, -0.5f, -20.0f),// 1, 0, 0
+    glm::vec3(-2.5f, -0.5f, -20.0f), // 1, 0, 1
+    glm::vec3(10.5f, -0.5f, -20.0f), // 1, 0, 2
+    glm::vec3(23.5f, -0.5f, -20.0f), // 1, 0, 3
+    
+    glm::vec3(-15.5f, -0.5f, -7.5f), // 1, 1, 0
+    glm::vec3(-2.5f, -0.5f, -7.5f),  // 1, 1, 1
+    glm::vec3(10.5f, -0.5f, -7.5f),  // 1, 1, 2
+    glm::vec3(23.5f, -0.5f, -7.5f),  // 1, 1, 3
+    
+    glm::vec3(-16.0f, 0.5f, 7.5f),   // 1, 2, 0
+    glm::vec3(-3.0f, 0.5f, 7.5f),    // 1, 2, 1
+    glm::vec3(10.0f, 0.5f, 7.5f),    // 1, 2, 2
+    glm::vec3(23.0f, 0.5f, 7.5f),    // 1, 2, 3
+
+    glm::vec3(-16.0f, 0.5f, 20.0f),  // 1, 3, 0
+    glm::vec3(-3.0f, 0.5f, 20.0f),   // 1, 3, 1
+    glm::vec3(10.0f, 0.5f, 20.0f),   // 1, 3, 2
+    glm::vec3(23.0f, 0.5f, 20.0f),   // 1, 3, 3
+};
+
+glm::vec3 third_grid[] = {
+    glm::vec3(-12.0f, -0.5f, -20.0f),// 2, 0, 0
+    glm::vec3(1.0f, -0.5f, -20.0f),  // 2, 0, 1
+    glm::vec3(14.0f, -0.5f, -20.0f), // 2, 0, 2
+    glm::vec3(27.0f, -0.5f, -20.0f), // 2, 0, 3
+    
+    glm::vec3(-12.0f, -0.5f, -7.5f), // 2, 1, 0
+    glm::vec3(1.0f, -0.5f, -7.5f),   // 2, 1, 1
+    glm::vec3(14.0f, -0.5f, -7.5f),  // 2, 1, 2
+    glm::vec3(27.0f, -0.5f, -7.5f),  // 2, 1, 3
+
+    glm::vec3(-12.5f, 0.5f, 7.5f),   // 2, 2, 0
+    glm::vec3(0.5f, 0.5f, 7.5f),     // 2, 2, 1
+    glm::vec3(13.5f, 0.5f, 7.5f),    // 2, 2, 2
+    glm::vec3(26.5f, 0.5f, 7.5f),    // 2, 2, 3
+    
+    glm::vec3(-12.5f, 0.5f, 20.0f),  // 2, 3, 0
+    glm::vec3(0.5f, 0.5f, 20.0f),    // 2, 3, 1
+    glm::vec3(13.5f, 0.5f, 20.0f),   // 2, 3, 2
+    glm::vec3(26.5f, 0.5f, 20.0f),   // 2, 3, 3
+};
+
+glm::vec3 fourth_grid[] = {
+    glm::vec3(-8.5f, -0.5f, -20.0f), // 3, 0, 0
+    glm::vec3(4.5f, -0.5f, -20.0f),  // 3, 0, 1
+    glm::vec3(17.5f, -0.5f, -20.0f), // 3, 0, 2
+    glm::vec3(30.5f, -0.5f, -20.0f), // 3, 0, 3
+
+    glm::vec3(-8.5f, -0.5f, -7.5f),  // 3, 1, 0
+    glm::vec3(4.5f, -0.5f, -7.5f),   // 3, 1, 1
+    glm::vec3(17.5f, -0.5f, -7.5f),  // 3, 1, 2
+    glm::vec3(30.5f, -0.5f, -7.5f),  // 3, 1, 3
+
+    glm::vec3(-9.0f, 0.5f, 7.5f),    // 3, 2, 0
+    glm::vec3(4.0f, 0.5f, 7.5f),     // 3, 2, 1
+    glm::vec3(17.0f, 0.5f, 7.5f),    // 3, 2, 2
+    glm::vec3(30.0f, 0.5f, 7.5f),    // 3, 2, 3
+
+    glm::vec3(-9.0f, 0.5f, 20.0f),   // 3, 3, 0
+    glm::vec3(4.0f, 0.5f, 20.0f),    // 3, 3, 1
+    glm::vec3(17.0f, 0.5f, 20.0f),   // 3, 3, 2
+    glm::vec3(30.0f, 0.5f, 20.0f),   // 3, 3, 3
+};
 
 void doLightingStuff(Shader shader){
     GLint lightDirLoc = glGetUniformLocation( shader.Program, "light.direction" );
@@ -67,13 +154,18 @@ void doLightingStuff(Shader shader){
     glUniform1f( glGetUniformLocation( shader.Program, "material.shininess" ), 32.0f ); 
 };
 
-void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model){
+void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color){
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "model" ), 1, GL_FALSE, glm::value_ptr( model ) );
+    glUniform4f( glGetUniformLocation( shader->Program, "extra_color" ), extra_color.r, extra_color.g, extra_color.b, extra_color.a);
     
     draw->Draw(*shader);
 }
+
+float flux_alpha = 1.0f;
+GLint posLoc = 0;
+bool confirm_pos = false;
 
 int main( )
 {
@@ -85,6 +177,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
 
     GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Game", nullptr, nullptr );
+    glfwSetWindowPos(window, 0, 0);
     
     if ( nullptr == window )
     {
@@ -111,7 +204,8 @@ int main( )
     
     glViewport( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
     glEnable( GL_DEPTH_TEST );
-    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Shader shader( "res/shaders/modelLoading.vs", "res/shaders/modelLoading.frag" );
     
     shader.Use( );
@@ -121,54 +215,12 @@ int main( )
     Model modelX( "res/models/MarkerX.obj" );
     Model modelO( "res/models/MarkerO.obj" );
     Model modelGrid( "res/models/grid.obj" );
+    Model planeMesh( "res/models/Plane.obj" );
 
     // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
     float aspect = (float) SCREEN_WIDTH / SCREEN_HEIGHT;
     glm::mat4 projection = glm::ortho(-aspect, aspect, -1.0f, 1.0f, 0.1f, 50.0f);
-
-
-    glm::vec3 positions[] = {
-        glm::vec3(-6.0f, 0.0f, -7.5f),
-        glm::vec3(6.0f, 0.0f, -7.5f),
-//        glm::vec3(-20.0f, 0.0f, -7.5f),
-//        glm::vec3(20.0f, 0.0f, -7.5f),
-
-//        glm::vec3(-6.0f, 0.0f, -20.0f),
-//        glm::vec3(6.0f, 0.0f, -20.0f),
-//        glm::vec3(-20.0f, 0.0f, -20.0f),
-        glm::vec3(20.0f, 0.0f, -20.0f),
-
-        glm::vec3(-6.0f, 0.5f, 7.5f),
-//        glm::vec3(6.0f, 0.5f, 7.5f),
-//        glm::vec3(-20.0f, 0.5f, 7.5f),
-//        glm::vec3(20.0f, 0.5f, 7.5f),
-//
-//        glm::vec3(-6.0f, 0.5f, 20.0f),
-        glm::vec3(6.0f, 0.5f, 20.0f),
-        glm::vec3(-20.0f, 0.5f, 20.0f),
-//        glm::vec3(20.0f, 0.5f, 20.0f),
-//
-    };
-    
-    glm::vec3 positions2[] = {
-        glm::vec3(-3.0f, -0.5f, -7.5f),
-        glm::vec3(10.0f, -0.5f, -7.5f),
-        glm::vec3(-3.0f, 0.5f, 7.5f),
-        glm::vec3(10.0f, 0.5f, 7.5f),
-    };
-
-    glm::vec3 positions5[] = {
-        glm::vec3(0.0f, -0.5f, -7.5f),
-        glm::vec3(13.0f, -0.5f, -7.5f),
-        glm::vec3(0.0f, 0.5f, 7.5f),
-        glm::vec3(13.0f, 0.5f, 7.5f),
-        glm::vec3(13.0f, 0.5f, 20.0f),
-    };
-    
-    glm::vec3 positions6[] = {
-        glm::vec3(4.0f, -0.5f, -7.5f),
-    };
     
     while( !glfwWindowShouldClose( window ) )
     {
@@ -206,14 +258,14 @@ int main( )
         
         glm::mat4 view = camera.GetViewMatrix( );
         
-        parentGrid1 = glm::mat4(1.0f);
-        parentGrid1 = glm::translate( parentGrid1, glm::vec3( 0.0f, 0.0f, -2.5f ) );
-        parentGrid1 = glm::rotate(parentGrid1, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        parentGrid1 = glm::rotate(parentGrid1, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        parentGrid1 = glm::scale(parentGrid1, glm::vec3(scaling));
-        parentGrid1 = glm::translate( parentGrid1, glm::vec3( 0.0f, 60.0f, 0.0f ) );
+        model = glm::mat4(1.0f);
+        model = glm::translate( model, glm::vec3( 0.0f, 0.0f, -2.5f ) );
+        model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(scaling));
+        model = glm::translate( model, glm::vec3( 0.0f, 60.0f, 0.0f ) );
         //parentGrid1 = glm::rotate(parentGrid1, (GLfloat)glfwGetTime()*10.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-        createObject("Top", &shader, &modelGrid, projection, view, parentGrid1);
+        createObject("Top", &shader, &modelGrid, projection, view, model);
         
 
         model = glm::mat4(1.0f);
@@ -240,78 +292,29 @@ int main( )
         model = glm::translate( model, glm::vec3( 0.0f, -60.0f, 0.0f ) );
         createObject("Top- 4 ", &shader, &modelGrid, projection, view, model);
         
-        for(GLint i=0; i<5; i++){
-            
-            glm::mat4 childModel = glm::mat4(1.0f);
-            
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, 0.0f, -2.5f ));
-            
-            childModel = glm::rotate(childModel, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-            childModel = glm::rotate(childModel, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-            childModel = glm::scale(childModel, glm::vec3(scaling));
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, 60.0f, 0.0f )  );
-            
-            childModel = glm::translate( childModel, positions[i]);
-            
-            parentGrid1 *= childModel;
-            createObject("X", &shader, &modelX, projection, view, childModel);
-        }
+        flux_alpha += 1.0f * deltaTime;
         
-        glm::mat4 oneCircle = glm::mat4(1.0f);
-        oneCircle = glm::translate( oneCircle, glm::vec3( 0.0f, 0.0f, -2.5f ));
-        oneCircle = glm::rotate(oneCircle, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        oneCircle = glm::rotate(oneCircle, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        oneCircle = glm::scale(oneCircle, glm::vec3(scaling));
-        oneCircle = glm::translate( oneCircle, glm::vec3( 0.0f, 60.0f, 0.0f )  );
-        oneCircle = glm::translate( oneCircle, positions[5]);
-        createObject("O", &shader, &modelO, projection, view, oneCircle);
-        
-        for(GLint i=0; i<4; i++){
-            
-            glm::mat4 childModel = glm::mat4(1.0f);
-            
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, 0.0f, -2.5f ));
-            
-            childModel = glm::rotate(childModel, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-            childModel = glm::rotate(childModel, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-            childModel = glm::scale(childModel, glm::vec3(scaling));
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, 20.0f, 0.0f )  );
-            
-            childModel = glm::translate( childModel, positions2[i]);
-            
-            parentGrid1 *= childModel;
-            createObject("O", &shader, &modelO, projection, view, childModel);
-        }
-     
-        for(GLint i=0; i<5; i++){
-            
-            glm::mat4 childModel = glm::mat4(1.0f);
-            
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, 0.0f, -2.5f ));
-            
-            childModel = glm::rotate(childModel, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-            childModel = glm::rotate(childModel, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-            childModel = glm::scale(childModel, glm::vec3(scaling));
-            childModel = glm::translate( childModel, glm::vec3( 0.0f, -20.0f, 0.0f )  );
-            
-            childModel = glm::translate( childModel, positions5[i]);
-            
-            parentGrid1 *= childModel;
-            if (i == 4){
-                createObject("X", &shader, &modelX, projection, view, childModel);
-            }else{
-                createObject("O", &shader, &modelO, projection, view, childModel);
+        glm::mat4 planeVector = glm::mat4(1.0f);
+        planeVector = glm::translate( planeVector, glm::vec3( 0.0f, 0.0f, -2.5f ));
+        planeVector = glm::rotate(planeVector, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
+        planeVector = glm::rotate(planeVector, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        planeVector = glm::scale(planeVector, glm::vec3(scaling));
+        planeVector = glm::translate( planeVector, glm::vec3( 0.0f, 60.0f, 0.0f )  );
+        planeVector = glm::translate( planeVector, first_grid[posLoc]);
+        createObject("|", &shader, &planeMesh, projection, view, planeVector, glm::vec4(0.5f,0.5f,0.5f,abs(sinf(flux_alpha))));
+
+        if (stored_grid.size() > 0){
+            for (GLint i = 0; i < stored_grid.size(); i++){
+                glm::mat4 tacs = glm::mat4(1.0f);
+                tacs = glm::translate( tacs, glm::vec3( 0.0f, 0.0f, -2.5f ));
+                tacs = glm::rotate(tacs, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
+                tacs = glm::rotate(tacs, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+                tacs = glm::scale(tacs, glm::vec3(scaling));
+                tacs = glm::translate( tacs, glm::vec3( 0.0f, 60.0f, 0.0f )  );
+                tacs = glm::translate( tacs, stored_grid[i]);
+                createObject("|", &shader, &modelX, projection, view, tacs);
             }
         }
-        
-        oneCircle = glm::mat4(1.0f);
-        oneCircle = glm::translate( oneCircle, glm::vec3( 0.0f, 0.0f, -2.5f ));
-        oneCircle = glm::rotate(oneCircle, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        oneCircle = glm::rotate(oneCircle, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        oneCircle = glm::scale(oneCircle, glm::vec3(scaling));
-        oneCircle = glm::translate( oneCircle, glm::vec3( 0.0f, -60.0f, 0.0f )  );
-        oneCircle = glm::translate( oneCircle, positions6[0]);
-        createObject("X", &shader, &modelX, projection, view, oneCircle);
         
         // BUFFER SWAP
         glfwSwapBuffers( window );
@@ -334,15 +337,15 @@ void DoMovement( )
         camera.ProcessKeyboard( BACKWARD, deltaTime );
     }
     
-    if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
-    {
-        camera.ProcessKeyboard( LEFT, deltaTime );
-    }
-    
-    if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
-    {
-        camera.ProcessKeyboard( RIGHT, deltaTime );
-    }
+//    if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
+//    {
+//        camera.ProcessKeyboard( LEFT, deltaTime );
+//    }
+//
+//    if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
+//    {
+//        camera.ProcessKeyboard( RIGHT, deltaTime );
+//    }
 }
 
 // CALLED WHENEVER A KEY IS PRESSED/RELEASED VIA GLFW
@@ -366,6 +369,11 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
     }
     if(action == GLFW_PRESS)
     {
+        if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
+        {
+            posLoc += 1;
+        }
+        
         if(key == GLFW_KEY_P) {
             projectionMode = !projectionMode;
         }
@@ -373,6 +381,10 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
         if(key == GLFW_KEY_C) {
             cameraMode = !cameraMode;
             camera = Camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
+        }
+        
+        if(key == GLFW_KEY_SPACE) {
+            stored_grid.push_back(first_grid[posLoc]);
         }
     }
     

@@ -25,8 +25,12 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
 
+uniform vec4 extra_color;
+
 void main()
 {
+    
+    
     // AMBIENT
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
     
@@ -42,5 +46,5 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     
-    color = vec4(ambient + diffuse + specular, 1.0f);
+    color = vec4(ambient + diffuse + specular, 1.0f) * extra_color;
 }

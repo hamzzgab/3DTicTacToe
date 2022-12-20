@@ -402,6 +402,29 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
     }
     if(action == GLFW_PRESS)
     {
+        if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
+        {
+            if (k > 0) --k;
+            
+            
+            if (k == 0 && j > 0){
+                k = 4;
+                --j;
+            }
+            
+            if (k == 0 && j == 0 && i == 0){
+                k = 0;
+                j = 0;
+            }
+            
+            if (k == 0 && j == 0 && i > 0){
+                k = 3;
+                j = 3;
+                i--;
+            }
+            
+        }
+        
         if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
         {
             if (k < 4) ++k;
@@ -426,16 +449,34 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
         
         if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
         {
-            if ( i > 0){
+            if (j > 0){
+                j--;
+            }else{
+                j = j;
+            }
+        }
+        if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
+        {
+            if (j < 3){
+                j++;
+            }else{
+                j = j;
+            }
+        }
+        
+        // MOVING UP AND DOWN THE GRID
+        if ( keys[GLFW_KEY_Q] )
+        {
+            if ( i > 0 ){
                 i--;
             }else{
                 i = i;
             }
         }
         
-        if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
+        if ( keys[GLFW_KEY_E] )
         {
-            if (i < 3){
+            if ( i < 3 ){
                 i++;
             }else{
                 i = i;

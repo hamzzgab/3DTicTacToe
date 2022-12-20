@@ -42,6 +42,8 @@ bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
 
+bool firstTac = true;
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
@@ -49,7 +51,8 @@ glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
 
 glm::mat4 model = glm::mat4(1.0);
 
-std::vector< glm::vec3 > stored_grid;
+std::vector< glm::vec3 > store_pos;
+std::vector< bool > store_tac;
 
 glm::vec3 first_grid[] = {
     glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
@@ -303,16 +306,20 @@ int main( )
         planeVector = glm::translate( planeVector, first_grid[posLoc]);
         createObject("|", &shader, &planeMesh, projection, view, planeVector, glm::vec4(0.5f,0.5f,0.5f,abs(sinf(flux_alpha))));
 
-        if (stored_grid.size() > 0){
-            for (GLint i = 0; i < stored_grid.size(); i++){
+        if (store_pos.size() > 0){
+            for (GLint i = 0; i < store_pos.size(); i++){
                 glm::mat4 tacs = glm::mat4(1.0f);
                 tacs = glm::translate( tacs, glm::vec3( 0.0f, 0.0f, -2.5f ));
                 tacs = glm::rotate(tacs, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
                 tacs = glm::rotate(tacs, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
                 tacs = glm::scale(tacs, glm::vec3(scaling));
                 tacs = glm::translate( tacs, glm::vec3( 0.0f, 60.0f, 0.0f )  );
-                tacs = glm::translate( tacs, stored_grid[i]);
-                createObject("|", &shader, &modelX, projection, view, tacs);
+                tacs = glm::translate( tacs, store_pos[i]);
+                if (store_tac[i]){
+                    createObject("|", &shader, &modelX, projection, view, tacs);
+                }else{
+                    createObject("|", &shader, &modelO, projection, view, tacs);
+                }
             }
         }
         
@@ -384,7 +391,17 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
         }
         
         if(key == GLFW_KEY_SPACE) {
-            stored_grid.push_back(first_grid[posLoc]);
+            store_pos.push_back(first_grid[posLoc]);
+            store_tac.push_back(firstTac);
+            posLoc += 1;
+            firstTac = !firstTac;
+        }
+        
+        if(key == GLFW_KEY_R) {
+            store_pos.clear();
+            store_tac.clear();
+            posLoc = 0;
+            firstTac = true;
         }
     }
     

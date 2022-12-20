@@ -51,95 +51,121 @@ glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
 
 glm::mat4 model = glm::mat4(1.0);
 
-std::vector< glm::vec3 > store_pos;
+std::vector< int > store_i;
+std::vector< int > store_j;
+std::vector< int > store_k;
 std::vector< bool > store_tac;
 
-glm::vec3 first_grid[] = {
-    glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
-    glm::vec3(-6.5f, 0.0f, -20.0f),  // 0, 0, 1
-    glm::vec3(6.5f, 0.0f, -20.0f),   // 0, 0, 2
-    glm::vec3(19.5f, 0.0f, -20.0f),  // 0, 0, 3
 
-    glm::vec3(-19.5f, 0.0f, -7.0f),  // 0, 1, 0
-    glm::vec3(-6.5f, 0.0f, -7.0f),   // 0, 1, 1
-    glm::vec3(6.5f,  0.0f, -7.0f),   // 0, 1, 2
-    glm::vec3(19.5f, 0.0f, -7.0f),   // 0, 1, 3
-
-    glm::vec3(-20.0f, 0.5f, 7.5f),   // 0, 2, 0
-    glm::vec3(-7.0f, 0.5f, 7.5f),    // 0, 2, 1
-    glm::vec3(6.0f, 0.5f, 7.5f),     // 0, 2, 2
-    glm::vec3(19.0f, 0.5f, 7.5f),    // 0, 2, 3
-
-    glm::vec3(-20.0f, 0.5f, 20.0f),  // 0, 3, 0
-    glm::vec3(-7.0f, 0.5f, 20.0f),   // 0, 3, 1
-    glm::vec3(6.0f, 0.5f, 20.0f),    // 0, 3, 2
-    glm::vec3(19.0f, 0.5f, 20.0f),   // 0, 3, 3
+glm::vec3 curr_grid[] = {
+    glm::vec3( 0.0f, 60.0f, 0.0f ),
+    glm::vec3( 0.0f, 20.0f, 0.0f ),
+    glm::vec3( 0.0f, -20.0f, 0.0f ),
+    glm::vec3( 0.0f, -60.0f, 0.0f ),
 };
 
-glm::vec3 second_grid[] = {
-    glm::vec3(-15.5f, -0.5f, -20.0f),// 1, 0, 0
-    glm::vec3(-2.5f, -0.5f, -20.0f), // 1, 0, 1
-    glm::vec3(10.5f, -0.5f, -20.0f), // 1, 0, 2
-    glm::vec3(23.5f, -0.5f, -20.0f), // 1, 0, 3
-    
-    glm::vec3(-15.5f, -0.5f, -7.5f), // 1, 1, 0
-    glm::vec3(-2.5f, -0.5f, -7.5f),  // 1, 1, 1
-    glm::vec3(10.5f, -0.5f, -7.5f),  // 1, 1, 2
-    glm::vec3(23.5f, -0.5f, -7.5f),  // 1, 1, 3
-    
-    glm::vec3(-16.0f, 0.5f, 7.5f),   // 1, 2, 0
-    glm::vec3(-3.0f, 0.5f, 7.5f),    // 1, 2, 1
-    glm::vec3(10.0f, 0.5f, 7.5f),    // 1, 2, 2
-    glm::vec3(23.0f, 0.5f, 7.5f),    // 1, 2, 3
-
-    glm::vec3(-16.0f, 0.5f, 20.0f),  // 1, 3, 0
-    glm::vec3(-3.0f, 0.5f, 20.0f),   // 1, 3, 1
-    glm::vec3(10.0f, 0.5f, 20.0f),   // 1, 3, 2
-    glm::vec3(23.0f, 0.5f, 20.0f),   // 1, 3, 3
-};
-
-glm::vec3 third_grid[] = {
-    glm::vec3(-12.0f, -0.5f, -20.0f),// 2, 0, 0
-    glm::vec3(1.0f, -0.5f, -20.0f),  // 2, 0, 1
-    glm::vec3(14.0f, -0.5f, -20.0f), // 2, 0, 2
-    glm::vec3(27.0f, -0.5f, -20.0f), // 2, 0, 3
-    
-    glm::vec3(-12.0f, -0.5f, -7.5f), // 2, 1, 0
-    glm::vec3(1.0f, -0.5f, -7.5f),   // 2, 1, 1
-    glm::vec3(14.0f, -0.5f, -7.5f),  // 2, 1, 2
-    glm::vec3(27.0f, -0.5f, -7.5f),  // 2, 1, 3
-
-    glm::vec3(-12.5f, 0.5f, 7.5f),   // 2, 2, 0
-    glm::vec3(0.5f, 0.5f, 7.5f),     // 2, 2, 1
-    glm::vec3(13.5f, 0.5f, 7.5f),    // 2, 2, 2
-    glm::vec3(26.5f, 0.5f, 7.5f),    // 2, 2, 3
-    
-    glm::vec3(-12.5f, 0.5f, 20.0f),  // 2, 3, 0
-    glm::vec3(0.5f, 0.5f, 20.0f),    // 2, 3, 1
-    glm::vec3(13.5f, 0.5f, 20.0f),   // 2, 3, 2
-    glm::vec3(26.5f, 0.5f, 20.0f),   // 2, 3, 3
-};
-
-glm::vec3 fourth_grid[] = {
-    glm::vec3(-8.5f, -0.5f, -20.0f), // 3, 0, 0
-    glm::vec3(4.5f, -0.5f, -20.0f),  // 3, 0, 1
-    glm::vec3(17.5f, -0.5f, -20.0f), // 3, 0, 2
-    glm::vec3(30.5f, -0.5f, -20.0f), // 3, 0, 3
-
-    glm::vec3(-8.5f, -0.5f, -7.5f),  // 3, 1, 0
-    glm::vec3(4.5f, -0.5f, -7.5f),   // 3, 1, 1
-    glm::vec3(17.5f, -0.5f, -7.5f),  // 3, 1, 2
-    glm::vec3(30.5f, -0.5f, -7.5f),  // 3, 1, 3
-
-    glm::vec3(-9.0f, 0.5f, 7.5f),    // 3, 2, 0
-    glm::vec3(4.0f, 0.5f, 7.5f),     // 3, 2, 1
-    glm::vec3(17.0f, 0.5f, 7.5f),    // 3, 2, 2
-    glm::vec3(30.0f, 0.5f, 7.5f),    // 3, 2, 3
-
-    glm::vec3(-9.0f, 0.5f, 20.0f),   // 3, 3, 0
-    glm::vec3(4.0f, 0.5f, 20.0f),    // 3, 3, 1
-    glm::vec3(17.0f, 0.5f, 20.0f),   // 3, 3, 2
-    glm::vec3(30.0f, 0.5f, 20.0f),   // 3, 3, 3
+glm::vec3 grid_pos[4][4][4] = {
+    {       // FIRST GRID
+        {
+            glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
+            glm::vec3(-6.5f, 0.0f, -20.0f),  // 0, 0, 1
+            glm::vec3(6.5f, 0.0f, -20.0f),   // 0, 0, 2
+            glm::vec3(19.5f, 0.0f, -20.0f)  // 0, 0, 3
+        },
+        {
+            glm::vec3(-19.5f, 0.0f, -7.0f),  // 0, 1, 0
+            glm::vec3(-6.5f, 0.0f, -7.0f),   // 0, 1, 1
+            glm::vec3(6.5f,  0.0f, -7.0f),   // 0, 1, 2
+            glm::vec3(19.5f, 0.0f, -7.0f),   // 0, 1, 3
+        },
+        {
+            glm::vec3(-20.0f, 0.5f, 7.5f),   // 0, 2, 0
+            glm::vec3(-7.0f, 0.5f, 7.5f),    // 0, 2, 1
+            glm::vec3(6.0f, 0.5f, 7.5f),     // 0, 2, 2
+            glm::vec3(19.0f, 0.5f, 7.5f),    // 0, 2, 3
+        },
+        {
+            glm::vec3(-20.0f, 0.5f, 20.0f),  // 0, 3, 0
+            glm::vec3(-7.0f, 0.5f, 20.0f),   // 0, 3, 1
+            glm::vec3(6.0f, 0.5f, 20.0f),    // 0, 3, 2
+            glm::vec3(19.0f, 0.5f, 20.0f),   // 0, 3, 3
+        },
+    },{     // SECOND GRID
+        {
+            glm::vec3(-15.5f, -0.5f, -20.0f),// 1, 0, 0
+            glm::vec3(-2.5f, -0.5f, -20.0f), // 1, 0, 1
+            glm::vec3(10.5f, -0.5f, -20.0f), // 1, 0, 2
+            glm::vec3(23.5f, -0.5f, -20.0f), // 1, 0, 3
+        },
+        {
+            glm::vec3(-15.5f, -0.5f, -7.5f), // 1, 1, 0
+            glm::vec3(-2.5f, -0.5f, -7.5f),  // 1, 1, 1
+            glm::vec3(10.5f, -0.5f, -7.5f),  // 1, 1, 2
+            glm::vec3(23.5f, -0.5f, -7.5f),  // 1, 1, 3
+        },
+        {
+            glm::vec3(-16.0f, 0.5f, 7.5f),   // 1, 2, 0
+            glm::vec3(-3.0f, 0.5f, 7.5f),    // 1, 2, 1
+            glm::vec3(10.0f, 0.5f, 7.5f),    // 1, 2, 2
+            glm::vec3(23.0f, 0.5f, 7.5f),    // 1, 2, 3
+        },
+        {
+            glm::vec3(-16.0f, 0.5f, 20.0f),  // 1, 3, 0
+            glm::vec3(-3.0f, 0.5f, 20.0f),   // 1, 3, 1
+            glm::vec3(10.0f, 0.5f, 20.0f),   // 1, 3, 2
+            glm::vec3(23.0f, 0.5f, 20.0f),   // 1, 3, 3
+        },
+    },{     // THIRD GRID
+        {
+            glm::vec3(-12.0f, -0.5f, -20.0f),// 2, 0, 0
+            glm::vec3(1.0f, -0.5f, -20.0f),  // 2, 0, 1
+            glm::vec3(14.0f, -0.5f, -20.0f), // 2, 0, 2
+            glm::vec3(27.0f, -0.5f, -20.0f), // 2, 0, 3
+        },
+        {
+            glm::vec3(-12.0f, -0.5f, -7.5f), // 2, 1, 0
+            glm::vec3(1.0f, -0.5f, -7.5f),   // 2, 1, 1
+            glm::vec3(14.0f, -0.5f, -7.5f),  // 2, 1, 2
+            glm::vec3(27.0f, -0.5f, -7.5f),  // 2, 1, 3
+        },
+        {
+            glm::vec3(-12.5f, 0.5f, 7.5f),   // 2, 2, 0
+            glm::vec3(0.5f, 0.5f, 7.5f),     // 2, 2, 1
+            glm::vec3(13.5f, 0.5f, 7.5f),    // 2, 2, 2
+            glm::vec3(26.5f, 0.5f, 7.5f),    // 2, 2, 3
+        },
+        {
+            glm::vec3(-12.5f, 0.5f, 20.0f),  // 2, 3, 0
+            glm::vec3(0.5f, 0.5f, 20.0f),    // 2, 3, 1
+            glm::vec3(13.5f, 0.5f, 20.0f),   // 2, 3, 2
+            glm::vec3(26.5f, 0.5f, 20.0f),   // 2, 3, 3
+        },
+    },{     // FOURTH GRID
+        {
+            glm::vec3(-8.5f, -0.5f, -20.0f), // 3, 0, 0
+            glm::vec3(4.5f, -0.5f, -20.0f),  // 3, 0, 1
+            glm::vec3(17.5f, -0.5f, -20.0f), // 3, 0, 2
+            glm::vec3(30.5f, -0.5f, -20.0f), // 3, 0, 3
+        },
+        {
+            glm::vec3(-8.5f, -0.5f, -7.5f),  // 3, 1, 0
+            glm::vec3(4.5f, -0.5f, -7.5f),   // 3, 1, 1
+            glm::vec3(17.5f, -0.5f, -7.5f),  // 3, 1, 2
+            glm::vec3(30.5f, -0.5f, -7.5f),  // 3, 1, 3
+        },
+        {
+            glm::vec3(-9.0f, 0.5f, 7.5f),    // 3, 2, 0
+            glm::vec3(4.0f, 0.5f, 7.5f),     // 3, 2, 1
+            glm::vec3(17.0f, 0.5f, 7.5f),    // 3, 2, 2
+            glm::vec3(30.0f, 0.5f, 7.5f),    // 3, 2, 3
+        },
+        {
+            glm::vec3(-9.0f, 0.5f, 20.0f),   // 3, 3, 0
+            glm::vec3(4.0f, 0.5f, 20.0f),    // 3, 3, 1
+            glm::vec3(17.0f, 0.5f, 20.0f),   // 3, 3, 2
+            glm::vec3(30.0f, 0.5f, 20.0f),   // 3, 3, 3
+        }
+    }
 };
 
 void doLightingStuff(Shader shader){
@@ -167,7 +193,7 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
 }
 
 float flux_alpha = 1.0f;
-GLint posLoc = 0;
+GLint i = 0, j = 0, k = 0;
 bool confirm_pos = false;
 
 int main( )
@@ -302,19 +328,19 @@ int main( )
         planeVector = glm::rotate(planeVector, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
         planeVector = glm::rotate(planeVector, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
         planeVector = glm::scale(planeVector, glm::vec3(scaling));
-        planeVector = glm::translate( planeVector, glm::vec3( 0.0f, 60.0f, 0.0f )  );
-        planeVector = glm::translate( planeVector, first_grid[posLoc]);
+        planeVector = glm::translate( planeVector, curr_grid[i] );
+        planeVector = glm::translate( planeVector, grid_pos[i][j][k]);
         createObject("|", &shader, &planeMesh, projection, view, planeVector, glm::vec4(0.5f,0.5f,0.5f,abs(sinf(flux_alpha))));
 
-        if (store_pos.size() > 0){
-            for (GLint i = 0; i < store_pos.size(); i++){
+        if (store_i.size() > 0){
+            for (GLint i = 0; i < store_i.size(); i++){
                 glm::mat4 tacs = glm::mat4(1.0f);
                 tacs = glm::translate( tacs, glm::vec3( 0.0f, 0.0f, -2.5f ));
                 tacs = glm::rotate(tacs, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
                 tacs = glm::rotate(tacs, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
                 tacs = glm::scale(tacs, glm::vec3(scaling));
-                tacs = glm::translate( tacs, glm::vec3( 0.0f, 60.0f, 0.0f )  );
-                tacs = glm::translate( tacs, store_pos[i]);
+                tacs = glm::translate( tacs, curr_grid[store_i[i]] );
+                tacs = glm::translate( tacs, grid_pos[store_i[i]][store_j[i]][store_k[i]]);
                 if (store_tac[i]){
                     createObject("|", &shader, &modelX, projection, view, tacs);
                 }else{
@@ -334,15 +360,15 @@ int main( )
 void DoMovement( )
 {
     // CAMERA CONTROLS
-    if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
-    {
-        camera.ProcessKeyboard( FORWARD, deltaTime );
-    }
-    
-    if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
-    {
-        camera.ProcessKeyboard( BACKWARD, deltaTime );
-    }
+//    if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
+//    {
+//        camera.ProcessKeyboard( FORWARD, deltaTime );
+//    }
+//
+//    if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
+//    {
+//        camera.ProcessKeyboard( BACKWARD, deltaTime );
+//    }
     
 //    if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
 //    {
@@ -378,7 +404,42 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
     {
         if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
         {
-            posLoc += 1;
+            if (k < 4) ++k;
+            
+            if (k >= 4) {
+                k = 0;
+                ++j;
+            }
+            
+            if (j >= 4) {
+                k = 0;
+                j = 0;
+                ++i;
+            }
+            
+            if (i > 4){
+                i = 0;
+                k = 0;
+                j = 0;
+            }
+        }
+        
+        if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
+        {
+            if ( i > 0){
+                i--;
+            }else{
+                i = i;
+            }
+        }
+        
+        if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
+        {
+            if (i < 3){
+                i++;
+            }else{
+                i = i;
+            }
         }
         
         if(key == GLFW_KEY_P) {
@@ -391,16 +452,21 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
         }
         
         if(key == GLFW_KEY_SPACE) {
-            store_pos.push_back(first_grid[posLoc]);
+            store_i.push_back(i);
+            store_j.push_back(j);
+            store_k.push_back(k);
             store_tac.push_back(firstTac);
-            posLoc += 1;
             firstTac = !firstTac;
         }
         
         if(key == GLFW_KEY_R) {
-            store_pos.clear();
+            store_i.clear();
+            store_j.clear();
+            store_k.clear();
             store_tac.clear();
-            posLoc = 0;
+            i = 0;
+            j = 0;
+            k = 0;
             firstTac = true;
         }
     }

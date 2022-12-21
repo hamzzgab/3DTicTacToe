@@ -54,6 +54,7 @@ glm::mat4 model = glm::mat4(1.0);
 std::vector< int > store_i;
 std::vector< int > store_j;
 std::vector< int > store_k;
+std::vector<vector<vector< int >>> store_tics;
 std::vector< bool > store_tac;
 
 
@@ -70,7 +71,7 @@ glm::vec3 grid_pos[4][4][4] = {
             glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
             glm::vec3(-6.5f, 0.0f, -20.0f),  // 0, 0, 1
             glm::vec3(6.5f, 0.0f, -20.0f),   // 0, 0, 2
-            glm::vec3(19.5f, 0.0f, -20.0f)  // 0, 0, 3
+            glm::vec3(19.5f, 0.0f, -20.0f)   // 0, 0, 3
         },
         {
             glm::vec3(-19.5f, 0.0f, -7.0f),  // 0, 1, 0
@@ -192,12 +193,32 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
     draw->Draw(*shader);
 }
 
+std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics){
+    store_tics.clear();
+    for (int i=0; i<4; i++){
+        //inserrt a grid
+        store_tics.push_back(vector<vector< int >>());
+        for (int j=0; j<4; j++){
+            //insert the row
+            store_tics[i].push_back(std::vector<int>());
+            for (int k=0; k<4; k++){
+                //insert each column
+                store_tics[i][j].push_back(-1);
+            }
+        }
+    }
+    
+    return store_tics;
+}
+
 float flux_alpha = 1.0f;
 GLint i = 0, j = 0, k = 0;
 bool confirm_pos = false;
 
 int main( )
 {
+    store_tics = initialize_tics(store_tics);
+    
     glfwInit( );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
@@ -287,39 +308,16 @@ int main( )
         
         glm::mat4 view = camera.GetViewMatrix( );
         
-        model = glm::mat4(1.0f);
-        model = glm::translate( model, glm::vec3( 0.0f, 0.0f, -2.5f ) );
-        model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scaling));
-        model = glm::translate( model, glm::vec3( 0.0f, 60.0f, 0.0f ) );
-        //parentGrid1 = glm::rotate(parentGrid1, (GLfloat)glfwGetTime()*10.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-        createObject("Top", &shader, &modelGrid, projection, view, model);
-        
-
-        model = glm::mat4(1.0f);
-        model = glm::translate( model, glm::vec3(0.05f, 0.0f, -2.5f ) );
-        model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scaling));
-        model = glm::translate( model, glm::vec3( 0.0f, 20.0f, 0.0f ) );
-        createObject("Top - 2", &shader, &modelGrid, projection, view, model);
-
-        model = glm::mat4(1.0f);
-        model = glm::translate( model, glm::vec3( 0.1f, 0.0f, -2.5f ) );
-        model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scaling));
-        model = glm::translate( model, glm::vec3( 0.0f, -20.0f, 0.0f ) );
-        createObject("Top - 3", &shader, &modelGrid, projection, view, model);
-
-        model = glm::mat4(1.0f);
-        model = glm::translate( model, glm::vec3( 0.15f, 0.0f, -2.5f ) );
-        model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scaling));
-        model = glm::translate( model, glm::vec3( 0.0f, -60.0f, 0.0f ) );
-        createObject("Top- 4 ", &shader, &modelGrid, projection, view, model);
+        GLfloat grid_translate[] = {0.0f, 0.05f, 0.1f, 0.15f};
+        for (int i=0; i<4; i++){
+            model = glm::mat4(1.0f);
+            model = glm::translate( model, glm::vec3( grid_translate[i], 0.0f, -2.5f ) );
+            model = glm::rotate(model, glm::radians(degreeRotation), glm::vec3(1.0f, 1.0f, 0.0f));
+            model = glm::rotate(model, glm::radians(-18.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(scaling));
+            model = glm::translate( model, glm::vec3( curr_grid[i] ) );
+            createObject("Top", &shader, &modelGrid, projection, view, model);
+        }
         
         flux_alpha += 1.0f * deltaTime;
         
@@ -360,25 +358,25 @@ int main( )
 void DoMovement( )
 {
     // CAMERA CONTROLS
-//    if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
-//    {
-//        camera.ProcessKeyboard( FORWARD, deltaTime );
-//    }
-//
-//    if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
-//    {
-//        camera.ProcessKeyboard( BACKWARD, deltaTime );
-//    }
+    if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
+    {
+        if ( cameraMode ) camera.ProcessKeyboard( FORWARD, deltaTime );
+    }
+
+    if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
+    {
+        if ( cameraMode ) camera.ProcessKeyboard( BACKWARD, deltaTime );
+    }
     
-//    if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
-//    {
-//        camera.ProcessKeyboard( LEFT, deltaTime );
-//    }
-//
-//    if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
-//    {
-//        camera.ProcessKeyboard( RIGHT, deltaTime );
-//    }
+    if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
+    {
+        if ( cameraMode ) camera.ProcessKeyboard( LEFT, deltaTime );
+    }
+
+    if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
+    {
+        if ( cameraMode ) camera.ProcessKeyboard( RIGHT, deltaTime );
+    }
 }
 
 // CALLED WHENEVER A KEY IS PRESSED/RELEASED VIA GLFW
@@ -400,21 +398,19 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
             keys[key] = false;
         }
     }
+    
     if(action == GLFW_PRESS)
     {
+        
+        // MOVING LEFT
         if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
         {
-            if (k > 0) --k;
+            if (k > 0) k--;
             
             
             if (k == 0 && j > 0){
                 k = 4;
-                --j;
-            }
-            
-            if (k == 0 && j == 0 && i == 0){
-                k = 0;
-                j = 0;
+                j--;
             }
             
             if (k == 0 && j == 0 && i > 0){
@@ -423,6 +419,10 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
                 i--;
             }
             
+            if (k == 0 && j == 0 && i == 0){
+                k = 0;
+                j = 0;
+            }
         }
         
         if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
@@ -482,25 +482,20 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
                 i = i;
             }
         }
-        
-        if(key == GLFW_KEY_P) {
-            projectionMode = !projectionMode;
+        if(keys[GLFW_KEY_SPACE]) {
+            std::cout<<store_tics[i][j][k]<<std::endl;
+            if (store_tics[i][j][k] == -1){
+                store_i.push_back(i);
+                store_j.push_back(j);
+                store_k.push_back(k);
+                store_tics[i][j][k] = (int)firstTac;
+                std::cout<<store_tics[i][j][k]<<std::endl;
+                store_tac.push_back(firstTac);
+                firstTac = !firstTac;
+            }
         }
         
-        if(key == GLFW_KEY_C) {
-            cameraMode = !cameraMode;
-            camera = Camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
-        }
-        
-        if(key == GLFW_KEY_SPACE) {
-            store_i.push_back(i);
-            store_j.push_back(j);
-            store_k.push_back(k);
-            store_tac.push_back(firstTac);
-            firstTac = !firstTac;
-        }
-        
-        if(key == GLFW_KEY_R) {
+        if(keys[GLFW_KEY_R]) {
             store_i.clear();
             store_j.clear();
             store_k.clear();
@@ -508,15 +503,21 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
             i = 0;
             j = 0;
             k = 0;
+            store_tics = initialize_tics(store_tics);
             firstTac = true;
         }
+        
+        // CAMERA AND PROJECTION
+        
+        if( keys[GLFW_KEY_P] ) {
+            projectionMode = !projectionMode;
+        }
+        
+        if(keys[GLFW_KEY_C] ) {
+            cameraMode = !cameraMode;
+            camera = Camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
+        }
     }
-    
-    if (key == GLFW_KEY_T)
-    {
-        model = glm::translate(model, glm::vec3(1.0f, 1.0f, 1.0f));
-    }
-    
 }
 
 void MouseCallback( GLFWwindow *window, double xPos, double yPos )

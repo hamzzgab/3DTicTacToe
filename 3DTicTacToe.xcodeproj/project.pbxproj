@@ -18,6 +18,7 @@
 		2ABF1C602927BFF70075FBC3 /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ABF1C5F2927BFF70075FBC3 /* libGLEW.2.2.0.dylib */; };
 		2ABF1C622927C0100075FBC3 /* libassimp.5.2.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ABF1C612927C0100075FBC3 /* libassimp.5.2.4.dylib */; };
 		2ABF1C662927C11E0075FBC3 /* res in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2ABF1C642927C1060075FBC3 /* res */; };
+		2AC270FF29532D410085EF4D /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC270FE29532D410085EF4D /* libfreetype.6.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +76,7 @@
 		2ABF1C5F2927BFF70075FBC3 /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		2ABF1C612927C0100075FBC3 /* libassimp.5.2.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.2.4.dylib; path = ../../../../opt/homebrew/Cellar/assimp/5.2.5/lib/libassimp.5.2.4.dylib; sourceTree = "<group>"; };
 		2ABF1C642927C1060075FBC3 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+		2AC270FE29532D410085EF4D /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = ../../../../opt/homebrew/Cellar/freetype/2.12.1/lib/libfreetype.6.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AC270FF29532D410085EF4D /* libfreetype.6.dylib in Frameworks */,
 				2ABF1C622927C0100075FBC3 /* libassimp.5.2.4.dylib in Frameworks */,
 				2ABF1C602927BFF70075FBC3 /* libGLEW.2.2.0.dylib in Frameworks */,
 				2ABF1C5E2927BFE70075FBC3 /* libglfw.3.3.dylib in Frameworks */,
@@ -154,6 +157,7 @@
 		2ABF1C582927BF620075FBC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2AC270FE29532D410085EF4D /* libfreetype.6.dylib */,
 				2ABF1C612927C0100075FBC3 /* libassimp.5.2.4.dylib */,
 				2ABF1C5F2927BFF70075FBC3 /* libGLEW.2.2.0.dylib */,
 				2ABF1C5D2927BFE70075FBC3 /* libglfw.3.3.dylib */,
@@ -351,6 +355,7 @@
 					/opt/homebrew/Cellar/glfw/3.3.8/include,
 					/opt/homebrew/Cellar/freeglut/3.2.2/include,
 					/opt/homebrew/Cellar/glm/0.9.9.8/include,
+					/opt/homebrew/Cellar/freetype/2.12.1/include/freetype2,
 					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -359,6 +364,7 @@
 					/opt/homebrew/Cellar/glfw/3.3.8/lib,
 					/opt/homebrew/Cellar/glew/2.2.0_1/lib,
 					/opt/homebrew/Cellar/assimp/5.2.5/lib,
+					/opt/homebrew/Cellar/freetype/2.12.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -374,6 +380,7 @@
 					/opt/homebrew/Cellar/glfw/3.3.8/include,
 					/opt/homebrew/Cellar/freeglut/3.2.2/include,
 					/opt/homebrew/Cellar/glm/0.9.9.8/include,
+					/opt/homebrew/Cellar/freetype/2.12.1/include/freetype2,
 					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -382,6 +389,7 @@
 					/opt/homebrew/Cellar/glfw/3.3.8/lib,
 					/opt/homebrew/Cellar/glew/2.2.0_1/lib,
 					/opt/homebrew/Cellar/assimp/5.2.5/lib,
+					/opt/homebrew/Cellar/freetype/2.12.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

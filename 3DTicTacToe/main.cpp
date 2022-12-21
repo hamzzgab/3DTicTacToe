@@ -193,12 +193,8 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
     draw->Draw(*shader);
 }
 
-float flux_alpha = 1.0f;
-GLint i = 0, j = 0, k = 0;
-bool confirm_pos = false;
-
-int main( )
-{
+std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics){
+    store_tics.clear();
     for (int i=0; i<4; i++){
         //inserrt a grid
         store_tics.push_back(vector<vector< int >>());
@@ -212,20 +208,16 @@ int main( )
         }
     }
     
-//    for (int i=0; i<4; i++){
-//        //inserrt a grid
-//
-//        for (int j=0; j<4; j++){
-//            //insert the row
-//
-//            for (int k=0; k<4; k++){
-//                //insert each oclumn
-//                std::cout<<store_tics[i][j][k]<<" ";
-//            }
-//            std::cout<<std::endl;
-//        }
-//        std::cout<<std::endl;
-//    }
+    return store_tics;
+}
+
+float flux_alpha = 1.0f;
+GLint i = 0, j = 0, k = 0;
+bool confirm_pos = false;
+
+int main( )
+{
+    store_tics = initialize_tics(store_tics);
     
     glfwInit( );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
@@ -511,6 +503,7 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
             i = 0;
             j = 0;
             k = 0;
+            store_tics = initialize_tics(store_tics);
             firstTac = true;
         }
         

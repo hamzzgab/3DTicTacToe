@@ -32,38 +32,22 @@
 const GLuint WIDTH = 800, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
-// Function prototypes
-void RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color);
-void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color = glm::vec4(1.0f));
-void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
-void MouseCallback( GLFWwindow *window, double xPos, double yPos );
-void DoMovement( );
-
+// Camera Properties
 int projectionMode = 0; // Default = Orthographic
 int cameraMode = 0; // Default = Disabled
-
 Camera camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
 
-bool keys[1024];
-GLfloat lastX = 400, lastY = 300;
-bool firstMouse = true;
-
+// TicTacToe Properties
 bool firstTac = true;
 bool moveAval = true;
-
-GLfloat deltaTime = 0.0f;
-GLfloat lastFrame = 0.0f;
-
-glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
-
-glm::mat4 model = glm::mat4(1.0);
-
 std::vector< int > store_i;
 std::vector< int > store_j;
 std::vector< int > store_k;
 std::vector<vector<vector< int >>> store_tics;
 std::vector< bool > store_tac;
+GLint i = 0, j = 0, k = 0;
 
+// Text Properties
 struct Character {
     unsigned int TextureID;  // ID handle of the glyph texture
     glm::ivec2   Size;       // Size of glyph
@@ -74,6 +58,26 @@ struct Character {
 std::map<GLchar, Character> Characters;
 unsigned int VAO, VBO;
 
+// Function Prototypes
+std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics);
+void RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color);
+void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color = glm::vec4(1.0f));
+void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
+void MouseCallback( GLFWwindow *window, double xPos, double yPos );
+void DoMovement( );
+
+// Camera Movement
+bool keys[1024];
+GLfloat lastX = 400, lastY = 300;
+bool firstMouse = true;
+
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
+
+glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
+glm::mat4 model = glm::mat4(1.0);
+
+// Vector3 Arrays Containing the locations
 glm::vec3 curr_grid[] = {
     glm::vec3( 0.0f, 60.0f, 0.0f ),
     glm::vec3( 0.0f, 20.0f, 0.0f ),
@@ -191,6 +195,7 @@ void doLightingStuff(Shader shader){
     
     glUniform3f( lightDirLoc, -0.2f, -1.0f, -0.3f );
     glUniform3f( viewPosLoc,  camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
+    
     // LIGHT PROPERTIES
     glUniform3f( glGetUniformLocation( shader.Program, "light.ambient" ),  0.5f, 0.5f, 0.5f );
     glUniform3f( glGetUniformLocation( shader.Program, "light.diffuse" ),  0.5f, 0.5f, 0.5f );
@@ -212,24 +217,21 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
 std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics){
     store_tics.clear();
     for (int i=0; i<4; i++){
-        //inserrt a grid
+        // Insert Grid
         store_tics.push_back(vector<vector< int >>());
         for (int j=0; j<4; j++){
-            //insert the row
+            // Insert Row
             store_tics[i].push_back(std::vector<int>());
             for (int k=0; k<4; k++){
-                //insert each column
+                // Insert Column
                 store_tics[i][j].push_back(-1);
             }
         }
     }
-    
     return store_tics;
 }
 
 float flux_alpha = 1.0f;
-GLint i = 0, j = 0, k = 0;
-bool confirm_pos = false;
 
 int main( )
 {
@@ -254,12 +256,9 @@ int main( )
     }
     
     glfwMakeContextCurrent( window );
-    
     glfwGetFramebufferSize( window, &SCREEN_WIDTH, &SCREEN_HEIGHT );
-    
     glfwSetKeyCallback( window, KeyCallback );
     glfwSetCursorPosCallback( window, MouseCallback );
-    
     
     glewExperimental = GL_TRUE;
     if ( GLEW_OK != glewInit( ) )
@@ -287,8 +286,6 @@ int main( )
     
     float aspect = (float) SCREEN_WIDTH / SCREEN_HEIGHT;
     glm::mat4 projection = glm::ortho(-aspect, aspect, -1.0f, 1.0f, 0.1f, 50.0f);
-    
-    
     
     // OpenGL state
     // ------------
@@ -405,10 +402,6 @@ int main( )
             glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_NORMAL );
         }
         
-        //RenderText(textShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-        
-        
-        
         GLfloat currentFrame = glfwGetTime( );
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -484,7 +477,6 @@ int main( )
         if (!moveAval){
             RenderText(textShader, "Move Not Available!", 10.0f, 500.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
         }
-//        moveAval = true;
 
         // BUFFER SWAP
         glfwSwapBuffers( window );
@@ -596,7 +588,6 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
         
         if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
         {
-            cout<<j<<endl;
             if (j >= 0){
                 j--;
             }else{

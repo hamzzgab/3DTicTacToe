@@ -1,60 +1,10 @@
-// Std. Includes
-#define GL_SILENCE_DEPRECATION
-#include <iostream>
-#include <map>
-#include <string>
-
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
-
-// GL includes
-#include "Shader.h"
-#include "Camera.h"
-#include "Model.h"
-#include "Text.h"
-#include "Object.h"
-#include "GameLogic.h"
-
-// GLM Mathemtics
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-// Other Libs
-#include "SOIL2/SOIL2.h"
-#include <vector>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-// Properties
-const GLuint WIDTH = 800, HEIGHT = 600;
-int SCREEN_WIDTH, SCREEN_HEIGHT;
-
-// Camera Properties
-int projectionMode = 0; // Default = Orthographic
-int cameraMode = 0; // Default = Disabled
+#include "Imports.h"
 
 // Function Prototypes
 void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color = glm::vec4(1.0f));
 void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
 void MouseCallback( GLFWwindow *window, double xPos, double yPos );
 void DoMovement( );
-
-// Camera Movement
-bool keys[1024];
-GLfloat lastX = 400, lastY = 300;
-bool firstMouse = true;
-
-GLfloat deltaTime = 0.0f;
-GLfloat lastFrame = 0.0f;
-
-glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
-glm::mat4 model = glm::mat4(1.0);
 
 void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color){
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
@@ -64,8 +14,6 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
     
     draw->Draw(*shader);
 }
-
-float flux_alpha = 1.0f;
 
 GameLogic game;
 

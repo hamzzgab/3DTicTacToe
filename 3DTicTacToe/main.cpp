@@ -15,6 +15,9 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
+#include "Text.h"
+#include "Object.h"
+#include "GameLogic.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -35,32 +38,8 @@ int SCREEN_WIDTH, SCREEN_HEIGHT;
 // Camera Properties
 int projectionMode = 0; // Default = Orthographic
 int cameraMode = 0; // Default = Disabled
-Camera camera( glm::vec3( 0.2f, 0.0f, 0.0f ) );
-
-// TicTacToe Properties
-bool firstTac = true;
-bool moveAval = true;
-std::vector< int > store_i;
-std::vector< int > store_j;
-std::vector< int > store_k;
-std::vector<vector<vector< int >>> store_tics;
-std::vector< bool > store_tac;
-GLint i = 0, j = 0, k = 0;
-
-// Text Properties
-struct Character {
-    unsigned int TextureID;  // ID handle of the glyph texture
-    glm::ivec2   Size;       // Size of glyph
-    glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
-    unsigned int Advance;    // Offset to advance to next glyph
-};
-
-std::map<GLchar, Character> Characters;
-unsigned int VAO, VBO;
 
 // Function Prototypes
-std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics);
-void RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color);
 void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color = glm::vec4(1.0f));
 void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
 void MouseCallback( GLFWwindow *window, double xPos, double yPos );
@@ -77,134 +56,6 @@ GLfloat lastFrame = 0.0f;
 glm::vec3 lightPos( 0.0f, 0.0f, -8.5f );
 glm::mat4 model = glm::mat4(1.0);
 
-// Vector3 Arrays Containing the locations
-glm::vec3 curr_grid[] = {
-    glm::vec3( 0.0f, 60.0f, 0.0f ),
-    glm::vec3( 0.0f, 20.0f, 0.0f ),
-    glm::vec3( 0.0f, -20.0f, 0.0f ),
-    glm::vec3( 0.0f, -60.0f, 0.0f ),
-};
-
-glm::vec3 grid_pos[4][4][4] = {
-    {       // FIRST GRID
-        {
-            glm::vec3(-19.5f, 0.0f, -20.0f), // 0, 0, 0
-            glm::vec3(-6.5f, 0.0f, -20.0f),  // 0, 0, 1
-            glm::vec3(6.5f, 0.0f, -20.0f),   // 0, 0, 2
-            glm::vec3(19.5f, 0.0f, -20.0f)   // 0, 0, 3
-        },
-        {
-            glm::vec3(-19.5f, 0.0f, -7.0f),  // 0, 1, 0
-            glm::vec3(-6.5f, 0.0f, -7.0f),   // 0, 1, 1
-            glm::vec3(6.5f,  0.0f, -7.0f),   // 0, 1, 2
-            glm::vec3(19.5f, 0.0f, -7.0f),   // 0, 1, 3
-        },
-        {
-            glm::vec3(-20.0f, 0.5f, 7.5f),   // 0, 2, 0
-            glm::vec3(-7.0f, 0.5f, 7.5f),    // 0, 2, 1
-            glm::vec3(6.0f, 0.5f, 7.5f),     // 0, 2, 2
-            glm::vec3(19.0f, 0.5f, 7.5f),    // 0, 2, 3
-        },
-        {
-            glm::vec3(-20.0f, 0.5f, 20.0f),  // 0, 3, 0
-            glm::vec3(-7.0f, 0.5f, 20.0f),   // 0, 3, 1
-            glm::vec3(6.0f, 0.5f, 20.0f),    // 0, 3, 2
-            glm::vec3(19.0f, 0.5f, 20.0f),   // 0, 3, 3
-        },
-    },{     // SECOND GRID
-        {
-            glm::vec3(-15.5f, -0.5f, -20.0f),// 1, 0, 0
-            glm::vec3(-2.5f, -0.5f, -20.0f), // 1, 0, 1
-            glm::vec3(10.5f, -0.5f, -20.0f), // 1, 0, 2
-            glm::vec3(23.5f, -0.5f, -20.0f), // 1, 0, 3
-        },
-        {
-            glm::vec3(-15.5f, -0.5f, -7.5f), // 1, 1, 0
-            glm::vec3(-2.5f, -0.5f, -7.5f),  // 1, 1, 1
-            glm::vec3(10.5f, -0.5f, -7.5f),  // 1, 1, 2
-            glm::vec3(23.5f, -0.5f, -7.5f),  // 1, 1, 3
-        },
-        {
-            glm::vec3(-16.0f, 0.5f, 7.5f),   // 1, 2, 0
-            glm::vec3(-3.0f, 0.5f, 7.5f),    // 1, 2, 1
-            glm::vec3(10.0f, 0.5f, 7.5f),    // 1, 2, 2
-            glm::vec3(23.0f, 0.5f, 7.5f),    // 1, 2, 3
-        },
-        {
-            glm::vec3(-16.0f, 0.5f, 20.0f),  // 1, 3, 0
-            glm::vec3(-3.0f, 0.5f, 20.0f),   // 1, 3, 1
-            glm::vec3(10.0f, 0.5f, 20.0f),   // 1, 3, 2
-            glm::vec3(23.0f, 0.5f, 20.0f),   // 1, 3, 3
-        },
-    },{     // THIRD GRID
-        {
-            glm::vec3(-12.0f, -0.5f, -20.0f),// 2, 0, 0
-            glm::vec3(1.0f, -0.5f, -20.0f),  // 2, 0, 1
-            glm::vec3(14.0f, -0.5f, -20.0f), // 2, 0, 2
-            glm::vec3(27.0f, -0.5f, -20.0f), // 2, 0, 3
-        },
-        {
-            glm::vec3(-12.0f, -0.5f, -7.5f), // 2, 1, 0
-            glm::vec3(1.0f, -0.5f, -7.5f),   // 2, 1, 1
-            glm::vec3(14.0f, -0.5f, -7.5f),  // 2, 1, 2
-            glm::vec3(27.0f, -0.5f, -7.5f),  // 2, 1, 3
-        },
-        {
-            glm::vec3(-12.5f, 0.5f, 7.5f),   // 2, 2, 0
-            glm::vec3(0.5f, 0.5f, 7.5f),     // 2, 2, 1
-            glm::vec3(13.5f, 0.5f, 7.5f),    // 2, 2, 2
-            glm::vec3(26.5f, 0.5f, 7.5f),    // 2, 2, 3
-        },
-        {
-            glm::vec3(-12.5f, 0.5f, 20.0f),  // 2, 3, 0
-            glm::vec3(0.5f, 0.5f, 20.0f),    // 2, 3, 1
-            glm::vec3(13.5f, 0.5f, 20.0f),   // 2, 3, 2
-            glm::vec3(26.5f, 0.5f, 20.0f),   // 2, 3, 3
-        },
-    },{     // FOURTH GRID
-        {
-            glm::vec3(-8.5f, -0.5f, -20.0f), // 3, 0, 0
-            glm::vec3(4.5f, -0.5f, -20.0f),  // 3, 0, 1
-            glm::vec3(17.5f, -0.5f, -20.0f), // 3, 0, 2
-            glm::vec3(30.5f, -0.5f, -20.0f), // 3, 0, 3
-        },
-        {
-            glm::vec3(-8.5f, -0.5f, -7.5f),  // 3, 1, 0
-            glm::vec3(4.5f, -0.5f, -7.5f),   // 3, 1, 1
-            glm::vec3(17.5f, -0.5f, -7.5f),  // 3, 1, 2
-            glm::vec3(30.5f, -0.5f, -7.5f),  // 3, 1, 3
-        },
-        {
-            glm::vec3(-9.0f, 0.5f, 7.5f),    // 3, 2, 0
-            glm::vec3(4.0f, 0.5f, 7.5f),     // 3, 2, 1
-            glm::vec3(17.0f, 0.5f, 7.5f),    // 3, 2, 2
-            glm::vec3(30.0f, 0.5f, 7.5f),    // 3, 2, 3
-        },
-        {
-            glm::vec3(-9.0f, 0.5f, 20.0f),   // 3, 3, 0
-            glm::vec3(4.0f, 0.5f, 20.0f),    // 3, 3, 1
-            glm::vec3(17.0f, 0.5f, 20.0f),   // 3, 3, 2
-            glm::vec3(30.0f, 0.5f, 20.0f),   // 3, 3, 3
-        }
-    }
-};
-
-void doLightingStuff(Shader shader){
-    GLint lightDirLoc = glGetUniformLocation( shader.Program, "light.direction" );
-    GLint viewPosLoc  = glGetUniformLocation( shader.Program, "viewPos" );
-    
-    glUniform3f( lightDirLoc, -0.2f, -1.0f, -0.3f );
-    glUniform3f( viewPosLoc,  camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
-    
-    // LIGHT PROPERTIES
-    glUniform3f( glGetUniformLocation( shader.Program, "light.ambient" ),  0.5f, 0.5f, 0.5f );
-    glUniform3f( glGetUniformLocation( shader.Program, "light.diffuse" ),  0.5f, 0.5f, 0.5f );
-    glUniform3f( glGetUniformLocation( shader.Program, "light.specular" ), 1.0f, 1.0f, 1.0f );
-    
-    // MATERIAL PROPERTIES
-    glUniform1f( glGetUniformLocation( shader.Program, "material.shininess" ), 32.0f ); 
-};
-
 void createObject(const std::string& objectName, Shader *shader, Model *draw, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec4 extra_color){
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
     glUniformMatrix4fv( glGetUniformLocation( shader->Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
@@ -214,51 +65,13 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
     draw->Draw(*shader);
 }
 
-std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics){
-    store_tics.clear();
-    for (int i=0; i<4; i++){
-        // Insert Grid
-        store_tics.push_back(vector<vector< int >>());
-        for (int j=0; j<4; j++){
-            // Insert Row
-            store_tics[i].push_back(std::vector<int>());
-            for (int k=0; k<4; k++){
-                // Insert Column
-                store_tics[i][j].push_back(-1);
-            }
-        }
-    }
-    return store_tics;
-}
-
-bool check_move_available(bool moveAval){
-    if (store_tics[i][j][k] != -1){
-        moveAval = false;
-    }else{
-        moveAval = true;
-    }
-    
-    return moveAval;
-}
-
-int matrix[3][3];
-void initgame()
-{
-    //clear the matrix
-    for(int i = 0; i <= 2; i++)
-    {
-        for(int j = 0; j <= 2; j++)
-        {
-            matrix[i][j] = 1;
-        }
-    }
-}
-
 float flux_alpha = 1.0f;
+
+GameLogic game;
 
 int main( )
 {
-    store_tics = initialize_tics(store_tics);
+    store_tics = game.initialize_tics(store_tics);
     
     glfwInit( );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
@@ -323,92 +136,8 @@ int main( )
     glm::mat4 projection_text = glm::ortho(0.0f, (float)800.0f, 0.0f, (float)600.0f);
     glUniformMatrix4fv(glGetUniformLocation(textShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_text));
     
-    // FreeType
-    // --------
-    FT_Library ft;
-    // All functions return a value different than 0 whenever an error occurred
-    if (FT_Init_FreeType(&ft))
-    {
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-        return -1;
-    }
-
-    // find path to font
-    std::string font_name = "/Users/hamzz/Development/3DTicTacToe/3DTicTacToe/res/fonts/Arcade.ttf";
-    if (font_name.empty())
-    {
-        std::cout << "ERROR::FREETYPE: Failed to load font_name" << std::endl;
-        return -1;
-    }
-    
-    
-    FT_Face face;
-        if (FT_New_Face(ft, font_name.c_str(), 0, &face)) {
-            std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-            return -1;
-        }
-        else {
-            // set size to load glyphs as
-            FT_Set_Pixel_Sizes(face, 0, 48);
-
-            // disable byte-alignment restriction
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-            // load first 128 characters of ASCII set
-            for (unsigned char c = 0; c < 128; c++)
-            {
-                // Load character glyph
-                if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-                {
-                    std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-                    continue;
-                }
-                // generate texture
-                unsigned int texture;
-                glGenTextures(1, &texture);
-                glBindTexture(GL_TEXTURE_2D, texture);
-                glTexImage2D(
-                    GL_TEXTURE_2D,
-                    0,
-                    GL_RED,
-                    face->glyph->bitmap.width,
-                    face->glyph->bitmap.rows,
-                    0,
-                    GL_RED,
-                    GL_UNSIGNED_BYTE,
-                    face->glyph->bitmap.buffer
-                );
-                // set texture options
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                // now store character for later use
-                Character character = {
-                    texture,
-                    glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                    glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                    static_cast<unsigned int>(face->glyph->advance.x)
-                };
-                Characters.insert(std::pair<char, Character>(c, character));
-            }
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-        // destroy FreeType once we're finished
-        FT_Done_Face(face);
-        FT_Done_FreeType(ft);
-    
-    // configure VAO/VBO for texture quads
-    // -----------------------------------
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    Text text;
+    Object object;
     
     while( !glfwWindowShouldClose( window ) )
     {
@@ -438,7 +167,7 @@ int main( )
         
         shader.Use( );
         
-        doLightingStuff(shader);
+        object.doLightingStuff(shader);
         
         GLfloat degreeRotation = 50.5f;
         GLfloat scaling = 0.015f;
@@ -484,16 +213,15 @@ int main( )
             }
         }
         
-        RenderText(textShader, "3D Tic Tac Toe", 10.0f, 560.0f, 0.65f, glm::vec3(0.0f, 0.0f, 0.0f));
+        text.RenderText(textShader, "3D Tic Tac Toe", 10.0f, 560.0f, 0.65f, glm::vec3(0.0f, 0.0f, 0.0f));
         if (firstTac){
-            RenderText(textShader, "Current Player X", 10.0f, 530.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
+            text.RenderText(textShader, "Current Player X", 10.0f, 530.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
         }else{
-            RenderText(textShader, "Current Player O", 10.0f, 530.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
+            text.RenderText(textShader, "Current Player O", 10.0f, 530.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
         }
         
-        
         if (!moveAval){
-            RenderText(textShader, "Move Not Available!", 10.0f, 500.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
+            text.RenderText(textShader, "Move Not Available!", 10.0f, 500.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
         }
 
         // BUFFER SWAP
@@ -552,119 +280,9 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
     
     if(action == GLFW_PRESS)
     {
-        // MOVING LEFT
-        if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
-        {
-            if (k > 0 ){
-                k--;
-            }else if (k == 0){
-                k = 3;
-                if (j > 0){
-                    j--;
-                }else if (j == 0){
-                    j = 3;
-                    if (i > 0){
-                        i--;
-                    }else if (i == 0){
-                        i = 3;
-                    }
-                }
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        // MOVING RIGHT
-        if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
-        {
-            if (k < 3){
-                k++;
-            }else if (k == 3){
-                k = 0;
-                if (j < 3){
-                    j++;
-                }else if (j == 3){
-                    j = 0;
-                    if (i < 3){
-                        i++;
-                    }else if (i == 3){
-                        i = 0;
-                    }
-                }
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        // MOVING UP
-        if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
-        {
-            if (j > 0){
-                j--;
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        // MOVING DOWN
-        if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
-        {
-            if (j < 3){
-                j++;
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        // MOVING UP THE GRID
-        if ( keys[GLFW_KEY_Q] )
-        {
-            if ( i > 0 ){
-                i--;
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        // MOVING DOWN THE GRID
-        if ( keys[GLFW_KEY_E] )
-        {
-            if ( i < 3 ){
-                i++;
-            }
-            
-            moveAval = check_move_available(moveAval);
-        }
-        
-        if(keys[GLFW_KEY_SPACE]) {
-            if (store_tics[i][j][k] == -1){
-                store_i.push_back(i);
-                store_j.push_back(j);
-                store_k.push_back(k);
-                store_tics[i][j][k] = (int)firstTac;
-                store_tac.push_back(firstTac);
-                firstTac = !firstTac;
-                moveAval = true;
-            }else {
-                moveAval = false;
-            }
-        }
-        
-        if(keys[GLFW_KEY_R]) {
-            store_i.clear();
-            store_j.clear();
-            store_k.clear();
-            store_tac.clear();
-            i = 0;
-            j = 0;
-            k = 0;
-            store_tics = initialize_tics(store_tics);
-            firstTac = true;
-            moveAval = check_move_available(moveAval);
-        }
+        game.movement(keys);
         
         // CAMERA AND PROJECTION
-        
         if( keys[GLFW_KEY_P] ) {
             projectionMode = !projectionMode;
         }
@@ -695,55 +313,4 @@ void MouseCallback( GLFWwindow *window, double xPos, double yPos )
         
         camera.ProcessMouseMovement( xOffset, yOffset );
     }
-}
-
-// render line of text
-// -------------------
-void RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
-{
-    // activate corresponding render state
-    shader.Use();
-    glm::mat4 projection_text = glm::ortho(0.0f, (float)800.0f, 0.0f, (float)600.0f);
-    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_text));
-    glUniform3f(glGetUniformLocation(shader.Program, "textColor"), color.x, color.y, color.z);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(VAO);
-
-    // iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
-    {
-        Character ch = Characters[*c];
-
-        float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
-
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
-    
-        // update VBO for each character
-        float vertices[6][4] = {
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }
-        };
-
-        // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-    }
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -77,6 +77,9 @@
 		2ABF1C612927C0100075FBC3 /* libassimp.5.2.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.2.4.dylib; path = ../../../../opt/homebrew/Cellar/assimp/5.2.5/lib/libassimp.5.2.4.dylib; sourceTree = "<group>"; };
 		2ABF1C642927C1060075FBC3 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		2AC270FE29532D410085EF4D /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = ../../../../opt/homebrew/Cellar/freetype/2.12.1/lib/libfreetype.6.dylib; sourceTree = "<group>"; };
+		2AE48EDE29571B6C0092754A /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
+		2AE48EDF29571FFE0092754A /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		2AE48EE0295723380092754A /* GameLogic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLogic.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +149,9 @@
 				2A9FE96C2927C3DE0073E4D3 /* SOIL2 */,
 				2ABF1C642927C1060075FBC3 /* res */,
 				2ABF1C512927BF490075FBC3 /* main.cpp */,
+				2AE48EE0295723380092754A /* GameLogic.h */,
+				2AE48EDF29571FFE0092754A /* Object.h */,
+				2AE48EDE29571B6C0092754A /* Text.h */,
 				2A9FE9502927C29D0073E4D3 /* Shader.h */,
 				2A9FE9512927C29D0073E4D3 /* Camera.h */,
 				2A9FE94F2927C29D0073E4D3 /* Mesh.h */,
@@ -195,7 +201,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					2ABF1C4D2927BF490075FBC3 = {
 						CreatedOnToolsVersion = 14.1;
@@ -269,6 +275,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -327,6 +334,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -348,7 +356,9 @@
 		2ABF1C562927BF490075FBC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				HEADER_SEARCH_PATHS = (
 					/opt/homebrew/Cellar/glew/2.2.0_1/include,
 					/opt/homebrew/Cellar/assimp/5.2.5/include,
@@ -373,7 +383,9 @@
 		2ABF1C572927BF490075FBC3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				HEADER_SEARCH_PATHS = (
 					/opt/homebrew/Cellar/glew/2.2.0_1/include,
 					/opt/homebrew/Cellar/assimp/5.2.5/include,

@@ -231,6 +231,29 @@ std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< in
     return store_tics;
 }
 
+bool check_move_available(bool moveAval){
+    if (store_tics[i][j][k] != -1){
+        moveAval = false;
+    }else{
+        moveAval = true;
+    }
+    
+    return moveAval;
+}
+
+int matrix[3][3];
+void initgame()
+{
+    //clear the matrix
+    for(int i = 0; i <= 2; i++)
+    {
+        for(int j = 0; j <= 2; j++)
+        {
+            matrix[i][j] = 1;
+        }
+    }
+}
+
 float flux_alpha = 1.0f;
 
 int main( )
@@ -468,11 +491,6 @@ int main( )
             RenderText(textShader, "Current Player O", 10.0f, 530.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
         }
         
-        if (store_tics[i][j][k] != -1){
-            moveAval = false;
-        }else{
-            moveAval = true;
-        }
         
         if (!moveAval){
             RenderText(textShader, "Move Not Available!", 10.0f, 500.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -534,93 +552,90 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
     
     if(action == GLFW_PRESS)
     {
-        
         // MOVING LEFT
         if ( keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT] )
         {
-            if (k > 0) k--;
-            
-            
-            if (k == 0 && j > 0){
-                k = 4;
-                j--;
-            }
-            
-            if (k == 0 && j == 0 && i > 0){
+            if (k > 0 ){
+                k--;
+            }else if (k == 0){
                 k = 3;
-                j = 3;
-                i--;
+                if (j > 0){
+                    j--;
+                }else if (j == 0){
+                    j = 3;
+                    if (i > 0){
+                        i--;
+                    }else if (i == 0){
+                        i = 3;
+                    }
+                }
             }
             
-            if (k == 0 && j == 0 && i == 0){
-                k = 0;
-                j = 0;
-            }
+            moveAval = check_move_available(moveAval);
         }
         
+        // MOVING RIGHT
         if ( keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT] )
         {
-            if (k < 4) ++k;
-            
-            if (k >= 4) {
+            if (k < 3){
+                k++;
+            }else if (k == 3){
                 k = 0;
-                ++j;
+                if (j < 3){
+                    j++;
+                }else if (j == 3){
+                    j = 0;
+                    if (i < 3){
+                        i++;
+                    }else if (i == 3){
+                        i = 0;
+                    }
+                }
             }
             
-            if (i == 4 && j == 3 && k == 3){
-                i = 3;
-                k = 3;
-                j = 3;
-            }
-            
-            if (j >= 4) {
-                k = 0;
-                j = 0;
-                ++i;
-            }
-            
-            if (i > 4){
-                i = 0;
-                k = 0;
-                j = 0;
-            }
+            moveAval = check_move_available(moveAval);
         }
         
+        // MOVING UP
         if ( keys[GLFW_KEY_W] || keys[GLFW_KEY_UP] )
         {
-            if (j >= 0){
+            if (j > 0){
                 j--;
-            }else{
-                j = j;
             }
+            
+            moveAval = check_move_available(moveAval);
         }
+        
+        // MOVING DOWN
         if ( keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN] )
         {
             if (j < 3){
                 j++;
-            }else{
-                j = j;
             }
+            
+            moveAval = check_move_available(moveAval);
         }
         
-        // MOVING UP AND DOWN THE GRID
+        // MOVING UP THE GRID
         if ( keys[GLFW_KEY_Q] )
         {
             if ( i > 0 ){
                 i--;
-            }else{
-                i = i;
             }
+            
+            moveAval = check_move_available(moveAval);
         }
         
+        // MOVING DOWN THE GRID
         if ( keys[GLFW_KEY_E] )
         {
             if ( i < 3 ){
                 i++;
-            }else{
-                i = i;
             }
+            
+            moveAval = check_move_available(moveAval);
         }
+        
         if(keys[GLFW_KEY_SPACE]) {
             if (store_tics[i][j][k] == -1){
                 store_i.push_back(i);
@@ -629,6 +644,9 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
                 store_tics[i][j][k] = (int)firstTac;
                 store_tac.push_back(firstTac);
                 firstTac = !firstTac;
+                moveAval = true;
+            }else {
+                moveAval = false;
             }
         }
         
@@ -642,6 +660,7 @@ void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mod
             k = 0;
             store_tics = initialize_tics(store_tics);
             firstTac = true;
+            moveAval = check_move_available(moveAval);
         }
         
         // CAMERA AND PROJECTION

@@ -128,7 +128,7 @@ public:
         }
         
         // MOVING UP THE GRID
-        if ( keys[GLFW_KEY_Q] )
+        if ( keys[GLFW_KEY_E] )
         {
             if ( i > 0 ){
                 i--;
@@ -138,7 +138,7 @@ public:
         }
         
         // MOVING DOWN THE GRID
-        if ( keys[GLFW_KEY_E] )
+        if ( keys[GLFW_KEY_Q] )
         {
             if ( i < 3 ){
                 i++;

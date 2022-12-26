@@ -29,4 +29,9 @@ glm::mat4 model = glm::mat4(1.0);
 
 float flux_alpha = 1.0f;
 
+GLfloat degreeRotation = 50.5f;
+GLfloat scaling = 0.015f;
+
+GLfloat grid_translate[] = {0.0f, 0.05f, 0.1f, 0.15f};
+
 #endif /* Constants_h */

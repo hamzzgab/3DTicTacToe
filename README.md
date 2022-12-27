@@ -61,12 +61,16 @@ void createObject(const std::string& objectName, Shader *shader, Model *draw, gl
 
 
 ## 3. Camera Views
-<img width="912" alt="Orthographic" src="https://user-images.githubusercontent.com/47095611/209716781-cf0af34c-0967-4da4-bbfd-da6e0c80fd6f.png">
+<p align="center">
+  <img width="500" alt="Orthographic" src="https://user-images.githubusercontent.com/47095611/209716781-cf0af34c-0967-4da4-bbfd-da6e0c80fd6f.png">
+</p>
+
 
 Key Press: P
 - Change Projection
-<img width="912" alt="Perspective" src="https://user-images.githubusercontent.com/47095611/209716805-2195dfeb-a946-483d-8427-22a6bb281414.png">
-
+<p align="center">
+  <img width="500" alt="Perspective" src="https://user-images.githubusercontent.com/47095611/209716805-2195dfeb-a946-483d-8427-22a6bb281414.png">
+</p>
 
 Key Press: C
 - Enable Camera Mode

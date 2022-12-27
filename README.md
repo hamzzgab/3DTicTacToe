@@ -78,4 +78,11 @@ Key Press: C
 
 
 ## 4. Hierarchical Structures
+Key Press: H
+- Enable Hierarchical Movement
+<p align='center'>
+  <img width="500" alt="Screenshot 2022-12-27 at 20 04 11" src="https://user-images.githubusercontent.com/47095611/209717017-33d98da8-5321-4f3d-b2cc-3dc32eebe439.png">
+</p>
+
+
 ## 5. Playing the Game

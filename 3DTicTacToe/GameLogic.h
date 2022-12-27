@@ -31,10 +31,27 @@ std::vector< int > store_k;
 std::vector<vector<vector< int >>> store_tics;
 std::vector< bool > store_tac;
 GLint i = 0, j = 0, k = 0;
-
+bool gameWin = false;
+bool gameControls = false;
 
 class GameLogic{
 public:
+    
+    void init_game(){
+        store_i.clear();
+        store_j.clear();
+        store_k.clear();
+        store_tac.clear();
+        i = 0;
+        j = 0;
+        k = 0;
+        store_tics = initialize_tics(store_tics);
+        firstTac = true;
+        moveAval = check_move_available(moveAval, i, j, k);
+        gameWin = false;
+        gameControls = false;
+    }
+    
     std::vector<vector<vector< int >>> initialize_tics(std::vector<vector<vector< int >>> store_tics){
         store_tics.clear();
         for (int i=0; i<4; i++){
@@ -50,6 +67,86 @@ public:
             }
         }
         return store_tics;
+    }
+    
+    void check_win_status(){
+        // WIN \ GRID DOWN
+        int flag = 0;
+        for ( int a=0; a<3; a++ ){
+            for ( int b=0; b<4; b++ ){
+                if ( store_tics[a][b][b] != -1){
+                    if ( store_tics[a][b][b] == store_tics[a+1][b][b]){
+                        flag++;
+                        if (flag == 3) gameWin = true;
+                    }
+                }
+            }
+        }
+        
+        // WIN ----
+        for ( int a=0; a<4; a++ ){
+            for ( int b=0; b<4; b++ ){
+                for ( int c=0; c<3; c++){
+                    if ( store_tics[a][b][c] != -1){
+                        if ( store_tics[a][b][c] == store_tics[a][b][c+1]){
+                            if (c == 2) gameWin = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // WIN DIAG
+        flag = 0;
+        for ( int a=0; a<4; a++ ){
+            for ( int b=0; b<3; b++ ){
+                if ( store_tics[a][b][b] != -1){
+                    if ( store_tics[a][b][b] == store_tics[a][b+1][b+1]){
+                        flag++;
+                        if (flag == 3) gameWin = true;
+                    }
+                }
+            }
+        }
+        
+        // WIN HORIZONTAL
+        flag = 0;
+        for ( int a=0; a<4; a++ ){
+            for ( int b=0; b<4; b++ ){
+                for ( int c=0; c<3; c++){
+                    if ( store_tics[a][c][b] != -1){
+                        if ( store_tics[a][c][b] == store_tics[a][c+1][b]){
+                            flag++;
+                            if (flag == 3) gameWin=true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        flag = 0;
+        for ( int a=0; a<3; a++ ){
+            for ( int b=0; b<4; b++ ){
+                if ( store_tics[a][a][b] != -1){
+                    if ( store_tics[a][a][b] == store_tics[a+1][a+1][b]){
+                        flag++;
+                        if (flag == 3) gameWin = true;
+                    }
+                }
+            }
+        }
+        
+        flag = 0;
+        for ( int a=0; a<3; a++ ){
+            for ( int b=0; b<4; b++ ){
+                if ( store_tics[a][b][a] != -1){
+                    if ( store_tics[a][b][a] == store_tics[a+1][b][a+1]){
+                        flag++;
+                        if (flag == 3) gameWin = true;
+                    }
+                }
+            }
+        }
     }
     
     bool check_move_available(bool moveAval, GLint i, GLint j, GLint k){
@@ -147,7 +244,7 @@ public:
             moveAval = check_move_available(moveAval, i, j, k);
         }
         
-        if(keys[GLFW_KEY_SPACE]) {
+        if(keys[GLFW_KEY_SPACE] && !gameWin) {
             if (store_tics[i][j][k] == -1){
                 store_i.push_back(i);
                 store_j.push_back(j);
@@ -161,17 +258,12 @@ public:
             }
         }
         
+        if(keys[GLFW_KEY_Y]) {
+            gameControls = !gameControls;
+        }
+        
         if(keys[GLFW_KEY_R]) {
-            store_i.clear();
-            store_j.clear();
-            store_k.clear();
-            store_tac.clear();
-            i = 0;
-            j = 0;
-            k = 0;
-            store_tics = initialize_tics(store_tics);
-            firstTac = true;
-            moveAval = check_move_available(moveAval, i, j, k);
+            init_game();
         }
     }
     

@@ -23,6 +23,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+// [3] OpenGL. (2014, June 1). In Learn OpenGL. https://learnopengl.com/Getting-started/OpenGL
+
 // Text Properties
 struct Character {
     unsigned int TextureID;  // ID handle of the glyph texture
@@ -39,27 +41,22 @@ public:
         FT_Library ft;
         FT_Face face;
         
-        // FreeType
-        // --------
-        // All functions return a value different than 0 whenever an error occurred
         if (FT_Init_FreeType(&ft))
         {
             std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-//            return -1;
-        }
 
-        // find path to font
+        }
+        
         std::string font_name = "/Users/hamzz/Development/3DTicTacToe/3DTicTacToe/res/fonts/Arcade.ttf";
         if (font_name.empty())
         {
             std::cout << "ERROR::FREETYPE: Failed to load font_name" << std::endl;
-//            return -1;
         }
 
         if (FT_New_Face(ft, font_name.c_str(), 0, &face)) {
             std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-//            return -1;
         }
+        
         else {
             // set size to load glyphs as
             FT_Set_Pixel_Sizes(face, 0, 48);
@@ -96,7 +93,7 @@ public:
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                // now store character for later use
+                
                 Character character = {
                     texture,
                     glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
@@ -107,12 +104,9 @@ public:
             }
             glBindTexture(GL_TEXTURE_2D, 0);
         }
-        // destroy FreeType once we're finished
         FT_Done_Face(face);
         FT_Done_FreeType(ft);
         
-        // configure VAO/VBO for texture quads
-        // -----------------------------------
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
@@ -124,13 +118,9 @@ public:
         glBindVertexArray(0);
     }
     
-    
-    
-    // render line of text
-    // -------------------
     void RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
     {
-        // activate corresponding render state
+        
         shader.Use();
         glm::mat4 projection_text = glm::ortho(0.0f, (float)800.0f, 0.0f, (float)600.0f);
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_text));

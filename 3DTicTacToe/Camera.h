@@ -19,7 +19,7 @@ const GLfloat SPEED      =  6.0f;
 const GLfloat SENSITIVTY =  0.25f;
 const GLfloat ZOOM       =  45.0f;
 
-// # [1] Farhaan Hussain. (2016, August 28). Modern OpenGL 3.0+ Tutorials [Playlist]. YouTube. https://www.youtube.com/playlist?list=PLRtjMdoYXLf6zUMDJVRZYV-6g6n62vet8
+// [2] Farhaan Hussain. (2016, August 28). Modern OpenGL 3.0+ Tutorials [Playlist]. YouTube. https://www.youtube.com/playlist?list=PLRtjMdoYXLf6zUMDJVRZYV-6g6n62vet8
 class Camera
 {
 public:

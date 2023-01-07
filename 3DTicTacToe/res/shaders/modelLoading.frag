@@ -27,6 +27,8 @@ uniform Light light;
 
 uniform vec4 extra_color;
 
+// [3] OpenGL. (2014, June 1). In Learn OpenGL. https://learnopengl.com/Getting-started/OpenGL
+
 void main()
 {
     

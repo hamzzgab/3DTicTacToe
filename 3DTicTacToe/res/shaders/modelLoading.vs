@@ -11,6 +11,7 @@ out vec3 Normal;
 out vec3 FragPos;
 out vec2 TexCoords;
 
+// [3] OpenGL. (2014, June 1). In Learn OpenGL. https://learnopengl.com/Getting-started/OpenGL
 
 void main( )
 {

@@ -1,8 +1,10 @@
 #version 330 core
-layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>
+layout (location = 0) in vec4 vertex;
 out vec2 TexCoords;
 
 uniform mat4 projection;
+
+// [3] OpenGL. (2014, June 1). In Learn OpenGL. https://learnopengl.com/Getting-started/OpenGL
 
 void main()
 {

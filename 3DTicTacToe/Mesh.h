@@ -12,7 +12,7 @@
 
 using namespace std;
 
-// [2] OpenGL. (2014, June 1). In learnopengl. https://learnopengl.com/Getting-started/OpenGL
+// [2] Farhaan Hussain. (2016, August 28). Modern OpenGL 3.0+ Tutorials [Playlist]. YouTube. https://www.youtube.com/playlist?list=PLRtjMdoYXLf6zUMDJVRZYV-6g6n62vet8
 struct Vertex
 {
     // POSITION

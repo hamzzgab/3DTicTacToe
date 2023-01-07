@@ -8,6 +8,8 @@
 
 #include <GL/glew.h>
 
+// [3] OpenGL. (2014, June 1). In Learn OpenGL. https://learnopengl.com/Getting-started/OpenGL
+
 class Shader
 {
 public:

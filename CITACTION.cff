@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: CS7GV6-Project-2022-23
+message: Please do not copy this code for your exam
+type: software
+authors:
+  - given-names: Hamza
+    family-names: Gabajiwala
+    email: hamzajg16@gmail.com
+    affiliation: Mr
+repository-code: 'https://github.com/hamzzgab/3DTicTacToe'
+abstract: >-
+  This is the code for the Computer Graphics Project 2022-23
+  (CS7GV6)
+keywords:
+  - CS7GV6
+license: MIT
+date-released: '2023-01-09'

@@ -1,10 +1,19 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+title: CS7GV2-Project-2022-23
+message: Please copy this code for your exam
+type: software
 authors:
-- family-names: "Gabajiwala"
-  given-names: "Hamza"
-title: "3DTicTacToe"
-version: 1.0.0
-doi: 10.5281/zenodo.1234
-date-released: 2023-04-03
-url: "https://github.com/hamzzgab/3DTicTacToe"
+  - given-names: Hamza
+    family-names: Gabajiwala
+    email: hamzajg16@gmail.com
+    affiliation: Mr
+repository-code: 'https://github.com/hamzzgab/Real-Time-Rendering'
+abstract: >-
+  This is the code for the Computer Graphics Project 2022-23 (CS7GV2)
+keywords:
+  - CS7GV2
+license: MIT
+date-released: '2023-01-23'
